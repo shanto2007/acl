@@ -61,8 +61,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'auth.acl' => \shanto\acl\Middleware\AuthenticateWithAcl::class,
-        'resource.maker' => \shanto\acl\Middleware\ResourceMaker::class,
+        'auth.acl' => \Shanto\Acl\Middleware\AuthenticateWithAcl::class,
+        'resource.maker' => \Shanto\Acl\Middleware\ResourceMaker::class,
     ];
 
     /**

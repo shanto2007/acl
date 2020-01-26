@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \shanto\acl\Commands\AclResource::class
+        \Shanto\Acl\Commands\AclResource::class
     ];
 
     /**
