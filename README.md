@@ -103,5 +103,5 @@ Blade example:
 ```php
 {{ @nullsafe($obj->prop->value) }}
 ```
-
+### Credit(Acknowledgement):
 Thanks to Mahbubul Hasan Uzzal for his "https://github.com/mahabubulhasan/acl" package. This package is just an improvement of his codebase for laravel 6 applications.  
