@@ -1,78 +1,107 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# acl
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Dynamically configurable access control for Laravel applications..
 
-## About Laravel
+### install
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+composer require shanto/acl
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### configure
+In your laravel config/app.php under providers add 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```php
+shanto\acl\AclServiceProvider::class
+```
+### publish
+```
+php artisan vendor:publish
+```
+This command will publish view files inside `views/vendor/acl`, 
+seed files inside the `databases/seed` and a config file `config/acl.php`.
 
-## Learning Laravel
+### seed
+At your `DatabaseSeeder.php` under `database/seeds` add the following lines
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```php
+$this->call(UserTableSeeder::class); //optional        
+$this->call(RoleTableSeeder::class);
+$this->call(ResourceTableSeeder::class);
+$this->call(PermissionTableSeeder::class);
+$this->call(UserRoleTableSeeder::class);
+```
+NOTE: If you see any kind of class not found type error try running `composer dump-autoload` 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### artisan
+This library comes with an artisan command `acl:resource` to automatically create all the resources (_controller@action_) available in your project under `app/Http/Controllers` directory. To activate this command you need to add these following lines to your `app/Console/Kernel.php` file. 
+```php
+protected $commands = [
+    shanto\acl\Commands\AclResource::class
+];
 
-## Laravel Sponsors
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### @annotation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+Acl library now has two annotation support `@resource`, and `@allowRole` to be used with controller action
+```php
+/**
+* @resource('able to see home')
+* @allowRole('Default, Admin')
+*/
+public function index()
+{
+    return view('home');
+}
+```
+NOTE: by default **developer** role has the highest permission level, and it doesn't need to be mentioned in the 
+`@allowRole` annotation. If you remove the `@allowRole` annotation it won't delete the permissions from the 
+database, but if you change the role list in the annotation then it will update the databased accordingly.
 
-## Contributing
+### middleware
+This ACL library comes with two middleware as shown below. `AuthenticateWithAcl` is the middleware you need. The other `ResourceMaker` middle ware is just a helper to create resource dynamically if it doesn't exists in the first place and assign permission for it to the `developer` role.  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+In your `kernal.php` file add this lines
+```php
+'auth.acl' => \shanto\acl\Middleware\AuthenticateWithAcl::class,        
+'resource.maker' => \shanto\acl\Middleware\ResourceMaker::class,
+```
+In your `route/web.php` file add this lines
+```php
+Route::group(['middleware' => ['resource.maker','auth.acl']], function () {    
+    Route::get('/home', 'HomeController@index');    
+});
+```
+*IMPORTANT*: `resource.maker` must have to be placed before `auth.acl`. In production you can remove `resource.maker` once you have all the resource generated.
 
-## Code of Conduct
+### Role &amp; Resource UI
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+To access role visit `YOUR-HOST/role` url
 
-## Security Vulnerabilities
+To access resource UI visit `YOUR-HOST/resource` url
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### helpers
 
-## License
+`has_access` checks for if a role has access to a specific controller action.
+```php
+@if(has_access('User\UserController@getIndex'))
+OR
+@if(has_access('UserController@getIndex'))
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+`has_group_access` checks for if a role has access to a specific controller   
+```php 
+@if(has_group_access(['User-User','User-Role','User-Resource']))
+OR
+@if(has_group_access('User-User'))
+```
+
+`@nullsafe()` checks for whether any of the object property is null or not in a fluent interface ($obj->prop->value), if the chain is broken it will simply return an empty string and prevent showing up `call to a member function of a non-object` exception.
+
+Blade example: 
+```php
+{{ @nullsafe($obj->prop->value) }}
+```
+
+Thanks to Mahbubul Hasan Uzzal for his "https://github.com/mahabubulhasan/acl" package. This package is just an improvement of his codebase for laravel 6 applications.  
