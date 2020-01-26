@@ -1,6 +1,6 @@
 # acl
 
-Dynamically configurable access control for Laravel applications..
+Dynamically configurable access control management for Laravel applications..
 
 ### install
 
