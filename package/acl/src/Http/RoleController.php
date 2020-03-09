@@ -1,13 +1,13 @@
 <?php
 
-namespace shanto\acl\Http;
+namespace Shanto\Acl\Http;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use shanto\acl\Models\Resource;
-use shanto\acl\Models\Role;
-use shanto\acl\Models\Permission;
-use shanto\acl\Services\RoleService;
+use Shanto\Acl\Models\Resource;
+use Shanto\Acl\Models\Role;
+use Shanto\Acl\Models\Permission;
+use Shanto\Acl\Services\RoleService;
 
 class RoleController extends Controller {
 
@@ -16,9 +16,9 @@ class RoleController extends Controller {
      *
      * @return Response
      */
-    public function index() {                                
+    public function index() {
         return view('acl::role.index', [
-            'rows' => Role::paginate(30)            
+            'rows' => Role::paginate(30)
         ]);
     }
 
@@ -37,7 +37,7 @@ class RoleController extends Controller {
      * @param RoleService $service
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, RoleService $service) {        
+    public function store(Request $request, RoleService $service) {
         $service->validator($request->all())->validate();
         $service->create($request->all());
         return redirect('/role')->with('msg', 'Role created successfully!');
@@ -48,7 +48,7 @@ class RoleController extends Controller {
      * @param RoleService $service
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id, RoleService $service) {        
+    public function edit($id, RoleService $service) {
         return view('acl::role.edit', [
             'id' => $id,
             'role' => Role::find($id),
@@ -63,7 +63,7 @@ class RoleController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id, RoleService $service, Request $request) {        
+    public function update($id, RoleService $service, Request $request) {
         $service->validator($request->all(), $id)->validate();
         $service->update($id, $request->all());
         return redirect('/role')->with('msg', 'Role updated successfully!');
@@ -81,6 +81,10 @@ class RoleController extends Controller {
         Role::destroy($id);
         Permission::where('role_id', '=', $id)->delete();
         return redirect('/role')->with('msg', 'Role removed successfully!');
+    }
+
+    public function setPermissionError() {
+        return view('acl::errors.permission');
     }
 
 }

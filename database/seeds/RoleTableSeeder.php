@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use shanto\acl\Models\Role;
+use Shanto\Acl\Models\Role;
 
 class RoleTableSeeder extends Seeder {
 
@@ -10,7 +10,7 @@ class RoleTableSeeder extends Seeder {
      *
      * @return void
      */
-    public function run() {        
+    public function run() {
         Role::create(['name'=>'Developer']);
         Role::create(['name'=>'Default']);
     }

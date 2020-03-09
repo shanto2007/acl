@@ -35,7 +35,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php $index = 0; ?>
+                    <?php $index = 1; ?>
                     @forelse($rows as $r)
                         <tr>
                             <td>{{$index++}}.</td>

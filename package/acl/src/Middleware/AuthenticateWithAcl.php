@@ -1,12 +1,12 @@
 <?php
 
-namespace shanto\acl\Middleware;
+namespace Shanto\Acl\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use shanto\acl\Services\PermissionCheckService;
+use Shanto\Acl\Services\PermissionCheckService;
 use Route;
 
 class AuthenticateWithAcl {
@@ -42,10 +42,10 @@ class AuthenticateWithAcl {
             }
         }
         if(!PermissionCheckService::canAccess(Route::currentRouteAction(), $this->auth->user())){
-            return new Response('Forbidden', 403);
+            return redirect('permisson/error');
         }
-                        
+
         return $next($request);
     }
-    
+
 }

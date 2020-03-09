@@ -1,6 +1,6 @@
 <?php
 
-namespace shanto\acl\Models;
+namespace Shanto\Acl\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -49,11 +49,11 @@ class Permission extends Model {
     public function scopeRole($query, $role_id) {
         return $query->whereRoleId($role_id);
     }
-            
+
     public function scopeResource($query, $resource_id){
         return $query->whereResourceId($resource_id);
     }
-    
+
     public function resourceItem(){
         return $this->hasOne(Resource::class, 'resource_id', 'resource_id');
     }

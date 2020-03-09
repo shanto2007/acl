@@ -1,5 +1,5 @@
 {
-    "name": "shanto\\acl",
+    "name": "shanto/acl",
     "description": "Dynamically configurable access control management for laravel applications",
     "keywords": ["laravel", "acl", "dynamic role and permission"],
     "type": "library",
@@ -11,13 +11,16 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": ">=7.2.0",
+        "laravel/framework": ">=6.0.0"
+    },
     "autoload": {
         "files": [
             "src/helpers.php"
         ],
         "psr-4": {
-            "shanto\\acl\\": "src/"
+            "Shanto\\Acl\\": "src/"
         }
     }
 }

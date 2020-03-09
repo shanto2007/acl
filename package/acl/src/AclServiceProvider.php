@@ -1,5 +1,5 @@
 <?php
-namespace shanto\acl;
+namespace Shanto\Acl;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
@@ -25,6 +25,10 @@ class AclServiceProvider extends ServiceProvider {
         $this->publishes([
             __DIR__ . '/database/seeds/' => database_path('seeds')
         ], 'seeds');
+
+        $this->publishes([
+            __DIR__ . '/database/migrations' => database_path('migrations')
+        ], 'migrations');
 
         $this->publishes([
             __DIR__ . '/views' => resource_path('views/vendor/acl'),

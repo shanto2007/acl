@@ -1,6 +1,6 @@
 <?php
 
-namespace shanto\acl\Models;
+namespace Shanto\Acl\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class Resource extends Model {
      * @var string
      */
     protected $table = 'resources';
-    
+
     /**
      *
      * @var string
@@ -25,7 +25,7 @@ class Resource extends Model {
      * @var array
      */
     protected $fillable = ['resource_id','name','controller','action'];
-    
+
     public function permissoin(){
         return $this->hasMany('Uzzal\Acl\Models\Permission', 'resource_id', 'resource_id');
     }

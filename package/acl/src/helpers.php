@@ -1,7 +1,7 @@
 <?php
 if (! function_exists('has_access')) {
     /**
-     * 
+     *
      * @param string $action
      * @param bool $isActionFullPath
      * @return bool
@@ -13,13 +13,13 @@ if (! function_exists('has_access')) {
      * </code>
      */
     function has_access($action, $isActionFullPath=false){
-        return shanto\acl\Services\PermissionCheckService::hasAccess($action, $isActionFullPath);
+        return Shanto\Acl\Services\PermissionCheckService::hasAccess($action, $isActionFullPath);
     }
 }
 
 if (! function_exists('has_group_access')) {
     /**
-     * 
+     *
      * @param mix|string $group
      * @return bool
      * @example
@@ -29,14 +29,14 @@ if (! function_exists('has_group_access')) {
      * @if(has_group_access('User-User'))
      * </code>
      */
-    function has_group_access($group){    
-        return shanto\acl\Services\PermissionCheckService::hasGroupAccess($group);
+    function has_group_access($group){
+        return Shanto\Acl\Services\PermissionCheckService::hasGroupAccess($group);
     }
 }
 
 if (! function_exists('row_serial_start')) {
     /**
-     * 
+     *
      * @param type $paginator
      * @example
      * <code>

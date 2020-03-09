@@ -19,4 +19,5 @@ Auth::routes();
 
 Route::group(['middleware' => ['resource.maker','auth.acl']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/test', 'HomeController@test');
 });

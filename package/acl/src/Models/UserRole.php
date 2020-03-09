@@ -1,6 +1,6 @@
 <?php
 
-namespace shanto\acl\Models;
+namespace Shanto\Acl\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -12,7 +12,7 @@ class UserRole extends Model {
      * @var bool
      */
     public $timestamps = false;
-    
+
     /**
      * The database table used by the model.
      *
@@ -37,9 +37,9 @@ class UserRole extends Model {
     public static function bulkInsert($data) {
         DB::table('user_roles')->insert($data);
     }
-    
+
     public function role(){
         return $this->hasOne('Uzzal\Acl\Models\Role','role_id', 'role_id');
     }
-    
+
 }

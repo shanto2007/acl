@@ -30,6 +30,7 @@
                     </div>
                     <div class="pr-2">
                         <a class="btn btn-sm btn-primary" href="{{url('/resource/create')}}">Create New</a>
+                        <a class="btn btn-sm btn-success" href="/rearrange-resource">Re-Generate Resource</a>
                     </div>
                 </div>
             </div>
@@ -47,7 +48,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php $index = 0; ?>
+                        <?php $index = 1; ?>
                         @forelse($rows as $r)
                             <tr>
                                 <td>{{$index++}}.</td>
